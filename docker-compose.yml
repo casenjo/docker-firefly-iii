@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  firefly_iii:
+    image: jc5x/firefly-iii:latest
+    volumes:
+      - firefly_iii_export:/var/www/firefly-iii/storage/export
+      - firefly_iii_upload:/var/www/firefly-iii/storage/upload
+    env_file: .env
+    ports:
+      - 80:80
+    depends_on:
+      - firefly_iii_db
+
+  firefly_iii_db:
+    image: mysql/mysql-server:5.7.29
+    environment:
+      - MYSQL_DATABASE=firefly
+      - MYSQL_USER=firefly
+      - MYSQL_PASSWORD=yourFireflyPassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - firefly_iii_db:/var/lib/mysql
+
+volumes:
+   firefly_iii_export:
+   firefly_iii_upload:
+   firefly_iii_db:
